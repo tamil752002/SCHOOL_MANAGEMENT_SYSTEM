@@ -1,7 +1,7 @@
 import express from 'express';
 import { query, getClient } from '../../database/db.js';
 import { stringToUUID, optionalUUID, rowToStudent, studentToRow, generateUUID } from '../utils/helpers.js';
-
+import {asyncHandler} from '../middleware/asyncHandler.ts'
 const router = express.Router();
 
 // Helper: create parent user when requested; parent creds = p_<admission_number> / student password
@@ -103,27 +103,34 @@ async function saveActivity(client, activity) {
 }
 
 // POST /api/students/bulk-move – move students to target class/section
-router.post('/bulk-move', async (req, res) => {
-    try {
-        const { schoolId, studentIds, targetClass, targetSection } = req.body;
-        const sid = stringToUUID(schoolId);
-        if (!sid || !Array.isArray(studentIds) || studentIds.length === 0) {
-            return res.status(400).json({ error: 'schoolId and non-empty studentIds required' });
-        }
-        const ids = studentIds.map(id => stringToUUID(id)).filter(Boolean);
-        if (ids.length === 0) return res.status(400).json({ error: 'No valid student ids' });
-        const placeholders = ids.map((_, i) => `$${i + 3}`).join(', ');
-        const result = await query(
-            `UPDATE students SET student_class = $1, section = $2, updated_at = CURRENT_TIMESTAMP
-             WHERE id IN (${placeholders}) AND school_id = $${ids.length + 3}`,
-            [targetClass || '', targetSection || 'A', ...ids, sid]
-        );
-        res.json({ message: 'Students moved', updated: result.rowCount });
-    } catch (error) {
-        console.error('Bulk move error:', error);
-        res.status(500).json({ error: error.message });
+router.post('/bulk-move', asyncHandler(async (req, res) => {
+    const { schoolId, studentIds, targetClass, targetSection } = req.body;
+
+    const sid = stringToUUID(schoolId);
+
+    if (!sid || !Array.isArray(studentIds) || studentIds.length === 0) {
+        return res.status(400).json({
+            error: 'schoolId and non-empty studentIds required'
+        });
     }
-});
+
+    const ids = studentIds.map(id => stringToUUID(id)).filter(Boolean);
+
+    if (ids.length === 0)
+        return res.status(400).json({ error: 'No valid student ids' });
+
+    const placeholders = ids.map((_, i) => `$${i + 3}`).join(', ');
+
+    const result = await query(
+        `UPDATE students 
+         SET student_class = $1, section = $2, updated_at = CURRENT_TIMESTAMP
+         WHERE id IN (${placeholders}) 
+         AND school_id = $${ids.length + 3}`,
+        [targetClass || '', targetSection || 'A', ...ids, sid]
+    );
+
+    res.json({ message: 'Students moved', updated: result.rowCount });
+}));
 
 // GET /api/students/:id/exam-growth?subjects=Math,Science – exam records by year for charts
 router.get('/:id/exam-growth', async (req, res) => {
