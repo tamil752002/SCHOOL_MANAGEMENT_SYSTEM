@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* EduHub-inspired utilities */
+@layer utilities {
+  .gradient-primary {
+    background: linear-gradient(135deg, #0891b2 0%, #0d9488 100%);
+  }
+  .dark .gradient-primary {
+    background: linear-gradient(135deg, #22d3ee 0%, #2dd4bf 100%);
+  }
+  .gradient-hero {
+    background: linear-gradient(180deg, #f0fdfa 0%, #ecfeff 100%);
+  }
+  .dark .gradient-hero {
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  }
+  .gradient-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f0fdfa 100%);
+  }
+  .dark .gradient-card {
+    background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+  }
+  .text-gradient {
+    background: linear-gradient(135deg, #0891b2 0%, #0d9488 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .dark .text-gradient {
+    background: linear-gradient(135deg, #22d3ee 0%, #2dd4bf 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .shadow-soft {
+    box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.08);
+  }
+  .dark .shadow-soft {
+    box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4);
+  }
+  .shadow-glow {
+    box-shadow: 0 8px 40px -8px rgba(8, 145, 178, 0.35);
+  }
+  .dark .shadow-glow {
+    box-shadow: 0 8px 40px -8px rgba(34, 211, 238, 0.4);
+  }
+  .shadow-card {
+    box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.06), 0 8px 24px -4px rgba(15, 23, 42, 0.08);
+  }
+  .dark .shadow-card {
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.3), 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+  }
+}
+
+@layer base {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .font-display {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(71, 85, 105, 0.8);
+    border-radius: 10px;
+    border: 1px solid rgba(30, 41, 59, 0.5);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 116, 139, 1);
+  }
+
+  /* Firefox */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(71, 85, 105, 0.8) rgba(30, 41, 59, 0.5);
+  }
+
+  /* Target all overflow containers globally if they don't have the class */
+  .overflow-auto, .overflow-y-auto, .overflow-x-auto {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(71, 85, 105, 0.4) transparent;
+  }
+
+  .overflow-auto::-webkit-scrollbar, 
+  .overflow-y-auto::-webkit-scrollbar, 
+  .overflow-x-auto::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  .overflow-auto::-webkit-scrollbar-track,
+  .overflow-y-auto::-webkit-scrollbar-track,
+  .overflow-x-auto::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .overflow-auto::-webkit-scrollbar-thumb,
+  .overflow-y-auto::-webkit-scrollbar-thumb,
+  .overflow-x-auto::-webkit-scrollbar-thumb {
+    background: rgba(71, 85, 105, 0.4);
+    border-radius: 10px;
+  }
+
+  .overflow-auto::-webkit-scrollbar-thumb:hover,
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover,
+  .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+    background: rgba(71, 85, 105, 0.6);
+  }
+}
