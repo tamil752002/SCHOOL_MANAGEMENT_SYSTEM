@@ -91,11 +91,10 @@ export function LandingPage({ onDevLoginClick }: LandingPageProps = {}) {
     <div className="min-h-screen gradient-hero text-gray-900 dark:text-white">
       {/* Fixed Navbar - EduHub style */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
             ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-soft border-b border-gray-200 dark:border-slate-700'
             : 'bg-transparent'
-        }`}
+          }`}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16 lg:h-20">
@@ -122,7 +121,7 @@ export function LandingPage({ onDevLoginClick }: LandingPageProps = {}) {
             <div className="hidden md:flex items-center gap-2">
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-full text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-2 rounded-full text-gray-600 dark:text-gray-600 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                 aria-label={isDarkMode ? 'Light mode' : 'Dark mode'}
               >
                 {isDarkMode ? <Sun className="h-5 w-5 text-amber-400" /> : <Moon className="h-5 w-5" />}
@@ -132,6 +131,10 @@ export function LandingPage({ onDevLoginClick }: LandingPageProps = {}) {
                 className="border border-cyan-600 dark:border-cyan-400 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 py-2 px-4 rounded-lg font-medium transition-colors"
               >
                 Sign In
+              </button>
+              <button
+                className="border border-cyan-600 text-cyan-600 dark:text-cyan-400  hover:bg-cyan-50 dark:hover:bg-cyan-900/20 py-2 px-4 rounded-lg font-medium">
+                Sample
               </button>
               <button
                 onClick={() => setShowLoginPage(true)}
@@ -148,6 +151,7 @@ export function LandingPage({ onDevLoginClick }: LandingPageProps = {}) {
                 </button>
               )}
             </div>
+
             <div className="flex md:hidden items-center gap-2">
               <button
                 onClick={toggleTheme}

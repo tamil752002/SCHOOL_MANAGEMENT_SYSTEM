@@ -12,6 +12,7 @@ import { query } from './database/db.js';
 
 // Import modularized routes
 import { globalErrorHandler } from "./server-modules/middleware/errorHandler.js";
+import {requestLogger} from "./server-modules/middleware/requestLogger.ts"
 import routes from './server-modules/routes/index.js';
 // Initialize dotenv
 config();
@@ -33,6 +34,7 @@ function createApp(): Application {
     // Middleware
     app.use(cors());
     app.use(express.json({ limit: '50mb' }));
+    app.use(requestLogger);
 
     // Routes
     // app.use('/api', developerRoutes);
