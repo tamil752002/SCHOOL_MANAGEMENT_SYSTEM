@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../middleware/asyncHandler.js';
-import * as service from './attendance.service.js';
+import * as service from './attendance.service.ts';
 
 
 // POST /attendance/teacher

@@ -1,5 +1,5 @@
 import express from 'express';
-import validate from '../middleware/validdate.js';
+import validate from '../middleware/validate.js';
 import * as controller from './attendance.controller.js';
 import {
     teacherAttendanceSchema,
