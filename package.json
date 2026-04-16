@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "db:push": "node database/push-schema.js",
+    "build:server": "tsc",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
@@ -16,7 +17,7 @@
     "server": "cross-env CLUSTER_MODE=false tsx server.ts",
     "start:prod": "cross-env NODE_ENV=production node dist/server.js",
     "start:cluster": "cross-env NODE_ENV=production CLUSTER_MODE=true node dist/server.js",
-    "start": "concurrently \"npm run server\" \"npm run dev -- --host 0.0.0.0 --port 5000\"",
+    "start": "node dist/server.js",
     "load-test:health": "k6 run load-tests/health-check.js",
     "load-test:data": "k6 run load-tests/data-endpoint.js",
     "load-test:developer": "k6 run load-tests/developer-data.js",
