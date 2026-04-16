@@ -14,13 +14,15 @@ import leaveRoutes from './leave.js';
 import classesRoutes from './classes.js';
 import enrollmentsRoutes from './enrollments.js';
 import studentNewRoutes from '../students/students.routes.js';
+import newstudents from '../data/data.routes.js';
 const router = Router();
 
 router.use('/', developerRoutes);
 router.use('/', dataRoutes);
 router.use('/auth', authRoutes);
 // router.use('/students', studentRoutes);
-router.use('/students',studentNewRoutes)
+// router.use('/students',studentNewRoutes)
+router.use('/students',newstudents)
 router.use('/attendance', attendanceRoutes);
 router.use('/fees', feeRoutes);
 router.use('/exams', examRoutes);

@@ -11,7 +11,9 @@ pg.types.setTypeParser(1082, 'text', (v) => (v === null ? null : String(v).split
 // Create PostgreSQL connection pool
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-   ssl: false,
+    ssl: {
+        rejectUnauthorized: false
+    },
     // Connection pool settings
     max: parseInt(process.env.DB_POOL_MAX || '50', 10), // Maximum number of clients in the pool (default: 50)
     min: parseInt(process.env.DB_POOL_MIN || '5', 10), // Minimum number of clients in the pool (default: 5)

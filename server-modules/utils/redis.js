@@ -11,30 +11,33 @@ let isConnected = false;
  * @returns {Promise<RedisClientType>} Redis client instance
  */
 export async function getRedisClient() {
-    if (redisClient && isConnected) {
+    // ✅ Better check
+    if (redisClient?.isOpen) {
         return redisClient;
     }
 
     try {
         const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
-        
+        const isSecure = redisUrl.startsWith('rediss://');
+
         redisClient = createClient({
             url: redisUrl,
             socket: {
+                tls: isSecure,
+                rejectUnauthorized: false,
                 reconnectStrategy: (retries) => {
                     if (retries > 10) {
                         console.error('Redis: Max reconnection attempts reached');
                         return new Error('Max reconnection attempts reached');
                     }
-                    // Exponential backoff: 50ms, 100ms, 200ms, 400ms, etc.
                     return Math.min(retries * 50, 3000);
                 }
             }
         });
 
+        // ✅ Events (important for debugging)
         redisClient.on('error', (err) => {
             console.error('Redis Client Error:', err);
-            isConnected = false;
         });
 
         redisClient.on('connect', () => {
@@ -43,26 +46,23 @@ export async function getRedisClient() {
 
         redisClient.on('ready', () => {
             console.log('Redis: Connected and ready');
-            isConnected = true;
         });
 
         redisClient.on('reconnecting', () => {
             console.log('Redis: Reconnecting...');
-            isConnected = false;
         });
 
         redisClient.on('end', () => {
             console.log('Redis: Connection ended');
-            isConnected = false;
         });
 
-        // Connect to Redis
+        // ✅ MUST CONNECT
         await redisClient.connect();
-        
+
         return redisClient;
+
     } catch (error) {
         console.error('Failed to connect to Redis:', error);
-        // Return null if Redis is not available - app should still work without cache
         return null;
     }
 }
@@ -110,7 +110,7 @@ export async function getCache(key) {
     try {
         const client = await getRedisClient();
         if (!client) return null;
-        
+
         const value = await client.get(key);
         return value ? JSON.parse(value) : null;
     } catch (error) {
@@ -130,7 +130,7 @@ export async function setCache(key, value, ttl = 300) {
     try {
         const client = await getRedisClient();
         if (!client) return false;
-        
+
         await client.setEx(key, ttl, JSON.stringify(value));
         return true;
     } catch (error) {
@@ -148,7 +148,7 @@ export async function deleteCache(key) {
     try {
         const client = await getRedisClient();
         if (!client) return false;
-        
+
         await client.del(key);
         return true;
     } catch (error) {
@@ -166,10 +166,10 @@ export async function deleteCacheByPattern(pattern) {
     try {
         const client = await getRedisClient();
         if (!client) return 0;
-        
+
         const keys = await client.keys(pattern);
         if (keys.length === 0) return 0;
-        
+
         return await client.del(keys);
     } catch (error) {
         console.error(`Redis delete pattern error for ${pattern}:`, error);
